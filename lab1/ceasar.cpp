@@ -21,7 +21,7 @@ int main (int argc, char ** argv)
         else if (argv[1][0] == 'd')
             mode = DECRYPT;
         else {
-            std::cerr << "[Error:] Incorrect mode argument\n";
+            std::cerr << "[Error]: Incorrect mode argument\n";
             return 1;
         }
         a = std::atoi(argv[2]);

@@ -18,12 +18,7 @@ std::map<CHAR, int> alphabet_map {
     {',', 27}, {'.', 28},
 };
 
-const CHAR alphabet_arr[] {
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
-    'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
-    'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
-    ' ', ',', '.',
-};
+const CHAR *alphaber_arr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ .,";
 
 
 int gcd(int n1, int n2) {
