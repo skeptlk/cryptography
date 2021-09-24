@@ -26,7 +26,7 @@ struct CrackResult
 };
 
 
-std::wstring ceasar_decrypt(const std::wstring & crypted, int k, int &err) {
+std::wstring caesar_decrypt(const std::wstring & crypted, int k, int &err) {
     const int len = crypted.length();
     std::wstring result(len, ' ');
     auto map = map_alphabet((CHAR *)cyrillic_alphabet_ext);
@@ -122,10 +122,9 @@ CrackResult crack_cipher(const std::wstring & input, std::map<CHAR, double> lang
     res.key = probable_key;
     res.deviation = min_dev;
     res.error_flag = 0;
-    res.orig = s;
 
     for (int i = 0; i < ALPH_N; i++) {
-        std::wstring decr = ceasar_decrypt(input, i, res.error_flag);
+        std::wstring decr = caesar_decrypt(input, i, res.error_flag);
         auto dist = count_distribution(decr, res.error_flag);
         auto dev = deviation(dist, langstat, res.error_flag);
         if (res.error_flag)
@@ -140,6 +139,10 @@ CrackResult crack_cipher(const std::wstring & input, std::map<CHAR, double> lang
     if (min_dev > 0.1) {
         res.error_flag = TOO_BIG_DEVIATION;
     }
+
+    res.deviation = min_dev;
+    res.orig = s;
+
 
     return res;
 }
@@ -158,7 +161,7 @@ int main() {
 
     auto result = crack_cipher(input, stat);
 
-    std::wcout << result.orig << " " << result.deviation << "\n";
+    std::wcout << "Result: \n\n" << result.orig << "\n\nDeviation = " << result.deviation << "\n";
 
 
 }

@@ -4,8 +4,8 @@ CC=g++
 
 scytale: scytale.cpp
 	mkdir -p demo
-	$(CC) scytale.cpp simple_ciphers.cpp -o ./demo/scytale 
+	$(CC) scytale.cpp simple_ciphers.cpp -o ./demo/scytale.out
 
-ceasar: ceasar.cpp
+caesar: caesar.cpp
 	mkdir -p demo
-	$(CC) ceasar.cpp simple_ciphers.cpp -o ./demo/ceasar 
+	$(CC) caesar.cpp simple_ciphers.cpp -o ./demo/caesar.out

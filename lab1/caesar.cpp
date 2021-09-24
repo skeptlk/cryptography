@@ -3,31 +3,35 @@
 #include "simple_ciphers.h"
 
 // compile: 
-// g++ scytale.cpp simple_ciphers.cpp -o scytale
+// g++ caesar.cpp simple_ciphers.cpp -o caesar
 
 // run: 
-// $ ./scytale -e -k 5      -> encrypt with key = 5
-// $ ./scytale -d -k 5      -> decrypt with key = 5
+// $ ./caesar -e -a 3 -k 5   -> encrypt with keys a = 3 and k = 5
+// $ ./caesar -d -a 3 -k 5   -> decrypt with keys a = 3 and k = 5
 
 enum Mode { ENCRYPT, DECRYPT };
+
 
 int main (int argc, char ** argv) 
 {
     Mode mode = ENCRYPT;
-    int k; // key
+    int a, k; // keys
 
+    opterr = 0;
+    
     int c;
-    while ((c = getopt(argc, argv, "edk:")) != -1)
+    while ((c = getopt(argc, argv, "eda:k:")) != -1)
     {
         switch (c)
         {
         case 'e': mode = ENCRYPT; break;
         case 'd': mode = DECRYPT; break;
+        case 'a': a = std::atoi(optarg); break;
         case 'k': k = std::atoi(optarg); break;
         case '?':
             std::cout << "Invalid arguments!\n"
                       << "Please use -d to decrypt, -e to encrypt,\n" 
-                      << "-k 321 to specify key\n";
+                      << "-a 123 and -k 321 to specify key parts\n";
             break;
         default:
             break;
@@ -40,7 +44,8 @@ int main (int argc, char ** argv)
         input += line;
 
     if (mode == ENCRYPT)
-        std::cout << encrypt_scytale(input, k);
+        std::cout << encrypt_caesar(input, a, k);
     else 
-        std::cout << decrypt_scytale(input, k);
+        std::cout << decrypt_caesar(input, a, k);
+
 }

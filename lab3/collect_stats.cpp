@@ -19,12 +19,18 @@ std::map<CHAR, double> collect_stats(std::wifstream & file)
         map[c]++;
     }
 
+    std::map<CHAR, int> filtered;
+    // exclude non-cyrillic symbols
+    for (const CHAR c: cyrillic_alphabet_ext) {
+        filtered[c] = map[c];
+    }
+
     // count map sum
     // this thing is heavily overcomplicated
     // but stl algorithms is kinda fun :)
     int sum = std::accumulate(
-        map.begin(), 
-        map.end(), 
+        filtered.begin(), 
+        filtered.end(), 
         0, 
         [](double acc, const std::map<CHAR, int>::value_type& p) {
             return acc + p.second;
@@ -34,8 +40,8 @@ std::map<CHAR, double> collect_stats(std::wifstream & file)
     // make a map of probabilities
     std::map<CHAR, double> dist;
 
-    for (const CHAR ch: cyrillic_alphabet_ext) {
-        dist[ch] = (double) map[ch] / sum;
+    for (auto i = filtered.begin(); i != filtered.end(); ++i) {
+        dist[i->first] = (double) i->second / sum;
     }
 
     return std::move(dist);

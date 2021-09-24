@@ -3,7 +3,7 @@
 #include <numeric> /* accumulate */
 #include <locale> /* imbue and std::numpunct */
 
-std::wstring encrypt_ceasar(const std::wstring & input, int k) {
+std::wstring encrypt_caesar(const std::wstring & input, int k) {
     const int len = input.length();
     std::wstring result(len, ' ');
     auto map = map_alphabet((CHAR *)cyrillic_alphabet_ext);
@@ -26,7 +26,7 @@ int main() {
     while (std::getline(std::wcin, line))
         input += line;
 
-    std::wcout << encrypt_ceasar(input, key);
+    std::wcout << encrypt_caesar(input, key);
 
 }
 

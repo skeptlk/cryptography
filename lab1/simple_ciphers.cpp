@@ -1,9 +1,12 @@
 #include "alphabet.h"
 
-int inv(int k) {
+/**
+ * inv[k] is a such number that (inv[K] * K) % n = 1 
+ */
+int inv(int k, int n) {
     int i = 1;
     while (i < 100) {
-        if ((i * k) % ALPH_N == 1)
+        if ((i * k) % n == 1)
             return i;
         i++;
     }
@@ -14,7 +17,7 @@ int inv(int k) {
  *      Аффинная система подстановок Цезаря
  */
 
-std::string encrypt_ceasar(const std::string& source, int a, int k) {
+std::string encrypt_caesar(const std::string& source, int a, int k) {
     std::string result(source.length(), ' ');
 
     for (int i = 0; i < source.length(); ++i) {
@@ -28,13 +31,13 @@ std::string encrypt_ceasar(const std::string& source, int a, int k) {
     return result;
 }
 
-std::string decrypt_ceasar(const std::string& source, int a, int k) {
+std::string decrypt_caesar(const std::string& source, int a, int k) {
     std::string result(source.length(), ' ');
 
     for (int i = 0; i < source.length(); ++i) {
         CHAR ch = source[i];
         const int pos = alphabet_map[ch];
-        const int shift = (inv(a) * (pos + ALPH_N - k)) % ALPH_N;
+        const int shift = (inv(a, ALPH_N) * (pos + ALPH_N - k)) % ALPH_N;
         CHAR ch2 = alphabet_arr[shift];
         result[i] = ch2;
     }

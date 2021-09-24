@@ -1,9 +1,10 @@
 #include <iostream>
 #include <map>
 
-#define ALPH_N 29
 
 typedef char CHAR;
+
+#define ALPH_N (sizeof(alphabet_arr)/sizeof(CHAR) - 1)
 
 std::map<CHAR, int> alphabet_map {
     {'A', 0},  {'B', 1},  {'C', 2},
@@ -15,12 +16,14 @@ std::map<CHAR, int> alphabet_map {
     {'S', 18}, {'T', 19}, {'U', 20},
     {'V', 21}, {'W', 22}, {'X', 23},
     {'Y', 24}, {'Z', 25}, {' ', 26},
-    {',', 27}, {'.', 28},
+    {'.', 27}, {',', 28},
 };
 
-const CHAR *alphaber_arr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ .,";
+const CHAR alphabet_arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ .,";
 
-
+/**
+ * Find the greatest common divisor (Euclid)
+ */
 int gcd(int n1, int n2) {
     while(n1 != n2)
     {
