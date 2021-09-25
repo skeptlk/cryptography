@@ -1,4 +1,4 @@
-#include "alphabet.h"
+#include "simple_ciphers.h"
 
 /**
  * inv[k] is a such number that (inv[K] * K) % n = 1 
@@ -22,6 +22,10 @@ std::string encrypt_caesar(const std::string& source, int a, int k) {
 
     for (int i = 0; i < source.length(); ++i) {
         CHAR ch = source[i];
+        if (alphabet_map.count(ch) == 0) {
+            result[i] = ch;
+            continue;
+        }
         const int pos = alphabet_map[ch];
         const int shift = (a * pos + k) % ALPH_N;
         CHAR ch2 = alphabet_arr[shift];
@@ -36,6 +40,10 @@ std::string decrypt_caesar(const std::string& source, int a, int k) {
 
     for (int i = 0; i < source.length(); ++i) {
         CHAR ch = source[i];
+        if (alphabet_map.count(ch) == 0) {
+            result[i] = ch;
+            continue;
+        }
         const int pos = alphabet_map[ch];
         const int shift = (inv(a, ALPH_N) * (pos + ALPH_N - k)) % ALPH_N;
         CHAR ch2 = alphabet_arr[shift];
@@ -79,4 +87,18 @@ std::string decrypt_scytale(std::string source, int key) {
     }
 
     return result;
+}
+
+/**
+ * Find the greatest common divisor (Euclid)
+ */
+int gcd(int n1, int n2) {
+    while(n1 != n2)
+    {
+        if(n1 > n2)
+            n1 -= n2;
+        else
+            n2 -= n1;
+    }
+    return n1;
 }

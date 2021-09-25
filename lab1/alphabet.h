@@ -1,3 +1,6 @@
+#ifndef ALPHABET_1
+#define ALPHABET_1
+
 #include <iostream>
 #include <map>
 
@@ -21,16 +24,7 @@ std::map<CHAR, int> alphabet_map {
 
 const CHAR alphabet_arr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ .,";
 
-/**
- * Find the greatest common divisor (Euclid)
- */
-int gcd(int n1, int n2) {
-    while(n1 != n2)
-    {
-        if(n1 > n2)
-            n1 -= n2;
-        else
-            n2 -= n1;
-    }
-    return n1;
-}
+int gcd(int n1, int n2);
+
+
+#endif // ALPHABET
