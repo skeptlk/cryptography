@@ -1,4 +1,5 @@
 **/node_modules/
+md5/files
 **/.vscode
 **/*.fb2
 **/*.out

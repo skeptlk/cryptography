@@ -11,10 +11,10 @@ typedef uint64_t uint64;
 /** 
  * Rotate n by d bits
  */
-uint32 leftRotate(uint32 n, uint32 d){ 
+uint32 leftRotate(uint32 n, uint32 d)
+{ 
      return (n << d) | (n >> (sizeof(n) * 8 - d));
 }
-
 
 template <typename T>
 T swap_endian(T u)
@@ -61,46 +61,39 @@ int main(int argc, char **argv)
 
     std::ifstream input(argv[1]);
     uint64 len = 0; // initial length of message in bytes
-    unsigned char chunk[64];
+    char chunk[64];
     bool end = false;
-    // should process last appended chunk
-    bool processLast = false;
+    bool processLast = false; // should process last appended chunk
 
-    while (!end && !processLast) 
+    while (!end || processLast) 
     {
+        input.clear();
         input.read((char *)chunk, 64);
         len += input.gcount();
 
-        if (input.eofbit || input.failbit) {
+        if (input.fail()) {
             end = true;
             int c = input.gcount();
             chunk[c] = 0x80; 
             c++;
 
             if (c > 56) {
-                std::cout << "!!!\n";
                 while (c <= 64) {
                     chunk[c++] = 0;
                 }
                 processLast = true;
             } else {
-                if (processLast)
+                if (processLast) {
                     c = 0;
+                    processLast = false;
+                }
                 while (c <= 56)
                     chunk[c++] = 0;
-                // append original message length
+                // append original message length (in bits!)                
                 len *= 8;
                 memcpy(chunk + 56, &len, 8);
             }
         }
-
-
-        // for (int i = 0; i < 64; ++i) {
-        //     std::cout << std::hex << uint(chunk[i]);
-        //     std::cout << " ";
-        // }
-        // std::cout << "\n";
-
 
         uint32 M[16];
         memcpy(M, chunk, sizeof(chunk));
@@ -140,12 +133,14 @@ int main(int argc, char **argv)
         d0 += D;
     }
 
+    input.close();
+
     uint128 result = 
         ((uint128)swap_endian<uint32>(a0) << 96) | 
         ((uint128)swap_endian<uint32>(b0) << 64) | 
         ((uint128)swap_endian<uint32>(c0) << 32) | 
         ((uint128)swap_endian<uint32>(d0) << 0);
 
-    std::cout << "Result: " << std::hex << result << std::endl;
+    std::cout << std::hex << result << std::endl;
 }
 

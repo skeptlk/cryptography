@@ -1,7 +1,10 @@
 
-const md5 = require('md5');
+const md5File = require('md5-file');
 const fs = require('fs');
 
-fs.readFile('../test', (_, buf) => {
-    console.log(md5(buf));
+fs.readdir('../files', (err, files) => {
+    files.forEach(file => {
+        let hash = md5File.sync('../files/' + file);
+        console.log(hash, file);
+    })
 });
