@@ -14,8 +14,32 @@ ShrinkingGenerator::ShrinkingGenerator(uint64_t key)
 uint64_t ShrinkingGenerator::gamma() 
 {
     uint64_t result = 0;
-    for (int i = 0; i < sizeof(uint64_t) * 8; ++i) {
-        result |= (A->tick() & S->tick()) << i;
+    uint64_t bitcount  = 0;
+    while (bitcount < sizeof(uint64_t) * 8) 
+    {
+        #ifdef VERBOSE
+            auto a_tick = A->tick();
+            auto s_tick = S->tick();
+            std::cout << "=====\n";
+            std::cout << "A bit: " << a_tick << "\n";
+            std::cout << "A state: \n";
+            A->print_state();
+            std::cout << "S bit: " << s_tick << "\n";
+            std::cout << "S state: \n";
+            S->print_state();
+
+            if (a_tick) {
+                result |= s_tick << bitcount;
+            }
+        #else
+            if (A->tick()) {
+                result |= S->tick() << bitcount;
+            } else {
+                S ->tick();
+            }
+        #endif
+        bitcount++;
     }
+
     return result;
 }

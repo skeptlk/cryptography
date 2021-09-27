@@ -1,15 +1,17 @@
 #include <stdint.h>
 #include <functional>
 
+#define WIDTH 19
 
 class LFSR
 {
 private:
-    uint16_t state;
-    std::function<uint16_t(uint16_t)> pol;
+    uint32_t state;
+    std::function<uint32_t(uint32_t)> pol;
 public:
-    LFSR(uint16_t start_state, std::function<uint16_t(uint16_t)>);
-    uint16_t tick();
-    uint16_t generate();
+    LFSR(uint32_t start_state, std::function<uint32_t(uint32_t)>);
+    uint32_t tick();
+    uint32_t generate();
+    void print_state();
 };
 
