@@ -31,14 +31,16 @@ uint64_t ShrinkingGenerator::gamma()
             if (a_tick) {
                 result |= s_tick << bitcount;
             }
+            bitcount++;
+
         #else
             if (A->tick()) {
                 result |= S->tick() << bitcount;
+                bitcount++;
             } else {
-                S ->tick();
+                S->tick();
             }
         #endif
-        bitcount++;
     }
 
     return result;

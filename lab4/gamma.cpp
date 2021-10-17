@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <bitset>
 #include "shrinking_generator.hpp"
 
 /**
@@ -10,6 +11,12 @@
  * ./cipher d out 42              ## decode
  * rm out
  */
+
+template<typename T>
+void printbin(T n) {
+    std::bitset<sizeof (T) * 8>bs (n);
+    std::cout << bs << "\n";
+}
 
 void encrypt(const char * output_filename, ShrinkingGenerator *gen)
 {
@@ -34,10 +41,16 @@ void encrypt(const char * output_filename, ShrinkingGenerator *gen)
         // generate next gamma each 64 bits
         if (i % 8 == 0) {
             gamma = gen->gamma();
+            // std::cout << "next gamma: ";
+            printbin(gamma);
         }
         // take relevant part (8 bits) of gamma 
         char chunk = (char) (gamma >> ((i % 8) * 8));
+        // std::cout << "=\n";
+        // printbin(inp[i]);
+        // printbin(chunk);
         out[i] = inp[i] ^ chunk;
+        // printbin(out[i]);
     }
 
     file.write(out, input.length());

@@ -4,7 +4,7 @@
 
 int main ()
 {
-    ShrinkingGenerator gen(115502235080362L);
+    ShrinkingGenerator gen(4523452234523L);
 
     auto g = gen.gamma();
 
