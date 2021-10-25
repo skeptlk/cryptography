@@ -138,6 +138,6 @@ int main()
     if (ElGamal::verify(sm, pk)) {
         std::cout << "Yes!!!!!\n";
     } else {
-        std::cout << "Blyat :(\n";
+        std::cout << "Error!";
     }
 }

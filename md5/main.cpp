@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <sstream>
 #include <climits>
 
 typedef boost::multiprecision::uint128_t uint128;
@@ -13,7 +14,7 @@ typedef uint64_t uint64;
  */
 uint32 leftRotate(uint32 n, uint32 d)
 { 
-     return (n << d) | (n >> (sizeof(n) * 8 - d));
+    return (n << d) | (n >> (sizeof(n) * 8 - d));
 }
 
 template <typename T>
@@ -43,7 +44,7 @@ const uint32 s[64] = {
     6, 10, 15, 21,   6, 10, 15, 21,   6, 10, 15, 21,   6, 10, 15, 21,
 };
 
-int main(int argc, char **argv) 
+uint32* md5(std::istream* input)
 {
     uint32 K[64];
 
@@ -59,7 +60,7 @@ int main(int argc, char **argv)
            c0 = 0x98badcfe,   // C
            d0 = 0x10325476;   // D
 
-    std::ifstream input(argv[1]);
+    
     uint64 len = 0; // initial length of message in bytes
     char chunk[64];
     bool end = false;
@@ -67,13 +68,13 @@ int main(int argc, char **argv)
 
     while (!end || processLast) 
     {
-        input.clear();
-        input.read((char *)chunk, 64);
-        len += input.gcount();
+        input->clear();
+        input->read((char *)chunk, 64);
+        len += input->gcount();
 
-        if (input.fail()) {
+        if (input->fail()) {
             end = true;
-            int c = input.gcount();
+            int c = input->gcount();
             chunk[c] = 0x80; 
             c++;
 
@@ -133,14 +134,25 @@ int main(int argc, char **argv)
         d0 += D;
     }
 
-    input.close();
+    uint32* hash = new uint32[4]{
+        swap_endian<uint32>(a0), 
+        swap_endian<uint32>(b0), 
+        swap_endian<uint32>(c0), 
+        swap_endian<uint32>(d0)
+    };
+    return hash;
+}
 
-    uint128 result = 
-        ((uint128)swap_endian<uint32>(a0) << 96) | 
-        ((uint128)swap_endian<uint32>(b0) << 64) | 
-        ((uint128)swap_endian<uint32>(c0) << 32) | 
-        ((uint128)swap_endian<uint32>(d0) << 0);
+int main(int argc, char **argv) 
+{
+    // std::ifstream input(argv[1]);
 
-    std::cout << std::hex << result << std::endl;
+    std::istringstream ss("Test string");
+
+    auto hash = md5(&ss);
+
+    std::cout << std::hex << hash[0] << hash[1] << hash[2] << hash[3] << "\n";
+
+    // input.close();
 }
 
