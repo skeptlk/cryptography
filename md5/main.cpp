@@ -1,11 +1,9 @@
-#include <boost/multiprecision/cpp_int.hpp>
 #include <iostream>
 #include <fstream>
 #include <math.h>
 #include <sstream>
 #include <climits>
 
-typedef boost::multiprecision::uint128_t uint128;
 typedef uint32_t uint32;
 typedef uint64_t uint64;
 
@@ -145,14 +143,19 @@ uint32* md5(std::istream* input)
 
 int main(int argc, char **argv) 
 {
-    // std::ifstream input(argv[1]);
+    std::ifstream input(argv[1]);
 
-    std::istringstream ss("Test string");
+    auto hash = md5(&input);
 
-    auto hash = md5(&ss);
+    std::cout << std::hex 
+        << hash[0] 
+        << hash[1] 
+        << hash[2] 
+        << hash[3] << "\n";
 
-    std::cout << std::hex << hash[0] << hash[1] << hash[2] << hash[3] << "\n";
+    input.close();
 
-    // input.close();
+    // works with string stream too!
+    //std::istringstream ss(...);
 }
 
