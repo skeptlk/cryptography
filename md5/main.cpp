@@ -3,6 +3,7 @@
 #include <math.h>
 #include <sstream>
 #include <climits>
+#include <cstring>
 
 typedef uint32_t uint32;
 typedef uint64_t uint64;
