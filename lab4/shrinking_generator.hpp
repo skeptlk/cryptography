@@ -1,4 +1,6 @@
+// #define VERBOSE
 #include "lfsr.hpp"
+#include <iostream>
 
 
 class ShrinkingGenerator 

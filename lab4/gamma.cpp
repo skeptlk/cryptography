@@ -1,17 +1,22 @@
 #include <iostream>
 #include <fstream>
+#include <bitset>
 #include "shrinking_generator.hpp"
 
-const int key = 1337;
-
 /**
- * g++ gamma.cpp lfsr.cpp shrinking_generator.cpp -o cypher
+ * g++ gamma.cpp lfsr.cpp shrinking_generator.cpp -o cipher
  * 
- * ./cypher e out < test    ## encode
- * od -t x1 out             ## print in hex
- * ./cypher d out           ## decode
+ * ./cipher e out 42 < test.txt    ## encode
+ * od -t x1 out                 ## print in hex
+ * ./cipher d out 42              ## decode
  * rm out
  */
+
+template<typename T>
+void printbin(T n) {
+    std::bitset<sizeof (T) * 8>bs (n);
+    std::cout << bs << "\n";
+}
 
 void encrypt(const char * output_filename, ShrinkingGenerator *gen)
 {
@@ -33,13 +38,19 @@ void encrypt(const char * output_filename, ShrinkingGenerator *gen)
     uint64_t gamma;
 
     for (int i = 0; i < input.length(); ++i) {
-        // gamma is of 64 bits size which is 8 byte
+        // generate next gamma each 64 bits
         if (i % 8 == 0) {
             gamma = gen->gamma();
+            // std::cout << "next gamma: ";
+            printbin(gamma);
         }
         // take relevant part (8 bits) of gamma 
         char chunk = (char) (gamma >> ((i % 8) * 8));
+        // std::cout << "=\n";
+        // printbin(inp[i]);
+        // printbin(chunk);
         out[i] = inp[i] ^ chunk;
+        // printbin(out[i]);
     }
 
     file.write(out, input.length());
@@ -86,6 +97,13 @@ int main(int argc, char ** argv) {
         std::cerr << "[Error:] Specify file name as a second argument\n";
         return 1;
     }
+    
+    if (argc < 4) {
+        std::cerr << "[Error:] Specify key as a third argument\n";
+        return 1;
+    }
+
+    int key = std::atoi(argv[3]);
 
     auto gen = new ShrinkingGenerator(key);
 

@@ -1,15 +1,18 @@
 #include <stdint.h>
 #include <functional>
 
+#define WIDTH 19
 
+// todo: make this class templated
 class LFSR
 {
 private:
-    uint16_t state;
-    std::function<uint16_t(uint16_t)> pol;
+    uint64_t state;
+    std::function<uint64_t(uint64_t)> pol;
 public:
-    LFSR(uint16_t start_state, std::function<uint16_t(uint16_t)>);
-    uint16_t tick();
-    uint16_t generate();
+    LFSR(uint64_t start_state, std::function<uint64_t(uint64_t)>);
+    uint64_t tick();
+    uint64_t generate();
+    void print_state();
 };
 
